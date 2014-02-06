@@ -59,7 +59,8 @@ public class CodeFactory {
         ${three_param_opcode { a, b, c -> "um.r$a = um.arrays.get(um.r$b)[um.r$c];" } }
     };
     static Code[] array_amend = {
-        ${three_param_opcode { a, b, c -> "um.arrays.get(um.r$a)[um.r$b] = um.r$c;" } }
+        ${three_param_opcode { a, b, c -> "um.arrays.get(um.r$a)[um.r$b] = um.r$c; if (um.r$a==0) um.recompile(um.r$b);" } }
+        // \${three_param_opcode { a, b, c -> "int i = um.r\$a; um.arrays.get(i)[um.r\$b] = um.r\$c; if (i==0) um.recompile(um.r\$b);" } }
     };
     static Code[] addition = {
         ${three_param_opcode { a, b, c -> "um.r$a = um.r$b + um.r$c;" } }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class UM {
+    final boolean ondemand;
     boolean halt;
     int ip;
 
@@ -23,10 +24,13 @@ public final class UM {
 
     Code[] program = new Code[0];
 
-    public UM(int[] platters) {
+    public UM(int[] platters, boolean f) {
+        ondemand = f;
         arrays.add(null);
         load(platters);
     }
+
+    public UM(int[] platters) { this(platters, true); }
 
     public void spin() {
         while (!halt) {
@@ -109,11 +113,34 @@ public final class UM {
     }
 
 
-    void compile(Code[] program, int[] p, int i, int length) {
-        while (i < length) {
-            program[i] = CodeFactory.forOp(p[i]);
-            ++i;
+    final static Code translate = new Code() {
+        @Override
+        void execute(UM um) {
+            int ip = um.ip - 1;
+            Code code = CodeFactory.forOp(um.arrays.get(0)[ip]);
+            um.program[ip] = code;
+            code.execute(um);
         }
+    };
+
+    void compile(Code[] program, int[] p, int i, int limit) {
+        if (ondemand) {
+            Arrays.fill(program, i, limit, translate);
+        } else {
+            while (i < limit) {
+                program[i] = CodeFactory.forOp(p[i]);
+                ++i;
+            }
+        }
+    }
+
+    void recompile(int i) {
+//        if (ondemand) {
+//            program[i] = translate;
+//        } else {
+            program[i] = CodeFactory.forOp(arrays.get(0)[i]);
+            // compile(program, arrays.get(0), i, i+1);
+//        }
     }
 
     public void halt() {
