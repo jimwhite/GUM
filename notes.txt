@@ -1,0 +1,21 @@
+export JAVA_OPTS="-server -Xbatch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods"
+time groovy src/gum.groovy scrolls/um_sandmark.um | tee sandmark.txt
+time groovy src/gum.groovy scrolls/um_codex.um <key.txt | tee codex.txt
+
+
+No help:
+-XX:MaxInlineSize=235 -XX:FreqInlineSize=235 -XX:InlineSmallCode=235
+
+No help:
+-XX:CompileThreshold=1   // makes for long startup time but no apparent speed up of benchmark
+-XX:CompileThreshold=0	 // Apparently turns of compilation!
+
+
+CLASSPATH=out/production/GUM time groovy src/gummy.groovy scrolls/sandmark.umz | tee sandmark.txt
+
+SANDmark complete.
+       72.50 real        72.43 user         0.41 sys
+       74.68 real        74.57 user         0.44 sys
+
+CLASSPATH=out/production/GUM time groovy src/gummy.groovy scrolls/codex.umz <keys.txt >codex.txt
+
