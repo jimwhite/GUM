@@ -1,4 +1,4 @@
-export JAVA_OPTS="-server -Xbatch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods"
+export JAVA_OPTS="-server -Xbatch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:CompileThreshold=3"
 time groovy src/gum.groovy scrolls/um_sandmark.um | tee sandmark.txt
 time groovy src/gum.groovy scrolls/um_codex.um <key.txt | tee codex.txt
 
@@ -17,5 +17,7 @@ SANDmark complete.
        72.50 real        72.43 user         0.41 sys
        74.68 real        74.57 user         0.44 sys
 
-CLASSPATH=out/production/GUM time groovy src/gummy.groovy scrolls/codex.umz <keys.txt >codex.txt
+CLASSPATH=out/production/GUM groovy -Dfile.encoding=ISO-8859-1 src/gummy.groovy scrolls/codex.umz <keys.txt >codex.txt
+
+tail -c +196 codex.txt >scrolls/umix.um 
 

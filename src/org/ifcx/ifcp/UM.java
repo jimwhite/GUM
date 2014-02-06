@@ -36,6 +36,8 @@ public final class UM {
         while (!halt) {
             program[ip++].execute(this);
         }
+
+        System.out.flush();
     }
 
     int getRegister(int r) {
@@ -86,11 +88,12 @@ public final class UM {
     }
 
     void output(int c) {
-        System.out.print((char) c);
+        System.out.write(c);
     }
 
     int input() {
         try {
+            System.out.flush();
             return System.in.read();
         } catch (IOException e) {
             System.err.println("IOException on read: " + e.getMessage());
