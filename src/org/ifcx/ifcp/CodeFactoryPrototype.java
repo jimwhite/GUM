@@ -79,10 +79,13 @@ public class CodeFactoryPrototype {
                 if (v < ORTHOGRAPHY_VALUE_LIMIT) {
                     return orthography[a][v];
                 }
-                return new Code() {
-                    @Override
-                    void execute(UM um) { um.setRegister(a, v); }
-                };
+                switch (a) {
+                    case 0 :
+                        return new Code() {
+                            @Override
+                            void execute(UM um) { um.setRegister(0, v); }
+                        };
+                }
             default:
                 throw new IllegalArgumentException("Bad opcode " + (op >>> 28));
         }
